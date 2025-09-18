@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini Amazon Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">MyShop</div>
+    <div class="search">
+      <input id="searchInput" placeholder="Search for products...">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="actions">
+      <button id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <aside class="sidebar">
+      <h3>Categories</h3>
+      <ul id="categories">
+        <li data-cat="all" class="active">All</li>
+        <li data-cat="electronics">Electronics</li>
+        <li data-cat="books">Books</li>
+        <li data-cat="home">Home</li>
+      </ul>
+    </aside>
+
+    <section class="products">
+      <div class="toolbar">
+        <div id="resultsInfo">Showing <span id="resultCount">0</span> products</div>
+      </div>
+      <div id="productGrid" class="grid"></div>
+    </section>
+  </main>
+
+  <div id="cartModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Your Cart</h2>
+      <div id="cartList"></div>
+      <div class="cart-footer">
+        <div>Total: $<span id="cartTotal">0.00</span></div>
+        <button id="checkoutBtn">Checkout</button>
+        <button id="closeCart">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
