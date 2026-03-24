@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon.com Clone - Online Shopping for Everything</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+        }
+        .amazon-orange {
+            background-color: #ff9900;
+        }
+        .amazon-orange:hover {
+            background-color: #ff9000;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .deal-card:hover .deal-overlay {
+            opacity: 1;
+        }
+        .deal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 153, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .carousel {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .active {
+            z-index: 10;
+        }
+        .inactive {
+            z-index: 1;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        @media (max-width: 768px) {
+            .header-search {
+                display: none;
+            }
+            .mobile-search {
+                display: block;
+            }
+        }
+        .product-img {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-white text-black">
+    <!-- Header -->
+    <header class="bg-gray-100 border-b border-gray-300">
+        <div class="max-w-full px-4 py-2 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <i class="fas fa-shopping-cart text-3xl text-gray-800 mr-2"></i>
+                <span class="text-3xl font-bold text-gray-800">amazon</span><span class="text-lg text-gray-600">.com</span>
+            </div>
+            <!-- Search Bar -->
+            <div class="header-search flex-1 max-w-2xl mx-4">
+                <div class="flex">
+                    <select class="bg-gray-200 border border-gray-300 px-3 py-2 rounded-l">
+                        <option>All</option>
+                        <option>Electronics</option>
+                        <option>Books</option>
+                        <option>Clothing</option>
+                    </select>
+                    <input type="text" id="search-input" placeholder="Search Amazon" class="flex-1 px-3 py-2 border border-gray-300">
+                    <button id="search-btn" class="amazon-orange text-black px-4 py-2 rounded-r"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <!-- Account & Cart -->
+            <div class="flex items-center space-x-4">
+                <div class="text-sm hover:underline cursor-pointer">
+                    <span>Hello, sign in</span><br>
+                    <span class="font-bold">Account & Lists</span>
+                </div>
+                <div class="text-sm hover:underline cursor-pointer">
+                    <span>Returns</span><br>
+                    <span class="font-bold">& Orders</span>
+                </div>
+                <div class="relative cursor-pointer">
+                    <i class="fas fa-shopping-cart text-3xl text-gray-800"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gray-800 text-white text-xs rounded-full px-1">0</span>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Search -->
+        <div class="mobile-search hidden px-4 py-2 bg-gray-100">
+            <div class="flex">
+                <input type="text" id="mobile-search-input" placeholder="Search Amazon" class="flex-1 px-3 py-2 border border-gray-300 rounded-l">
+                <button id="mobile-search-btn" class="amazon-orange text-black px-4 py-2 rounded-r"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <!-- Nav Bar -->
+        <nav class="bg-gray-800 text-white px-4 py-2 text-sm">
+            <ul class="flex space-x-6">
+                <li><a href="#" class="hover:underline">Today's Deals</a></li>
+                <li><a href="#" class="hover:underline">Customer Service</a></li>
+                <li><a href="#" class="hover:underline">Registry</a></li>
+                <li><a href="#" class="hover:underline">Gift Cards</a></li>
+                <li><a href="#" class="hover:underline">Sell</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Carousel -->
+        <div class="carousel mb-8">
+            <div id="slide1" class="carousel-slide active fade-in">
+                <img src="https://placehold.co/1200x300" alt="Prime Video banner showcasing streaming service with colorful movie thumbnails and family enjoying entertainment on large screen TV with popcorn and cozy setup" class="w-full h-full object-cover">
+            </div>
+            <div id="slide2" class="carousel-slide inactive fade-out">
+                <img src="https://placehold.co/1200x300" alt="Electronics deals featuring bundle of wireless earbuds, smartwatch, and accessories with bright promotional text and modern tech background illuminated by blue lights" class="w-full h-full object-cover">
+            </div>
+            <div id="slide3" class="carousel-slide inactive fade-out">
+                <img src="https://placehold.co/1200x300" alt="Storewide sale advertisement with multiple product categories like fashion, home, and gadgets arranged in vibrant grid layout against white background with discount percentages" class="w-full h-full object-cover">
+            </div>
+            <button id="prev-slide" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded"><</button>
+            <button id="next-slide" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded">></button>
+        </div>
+
+        <!-- Product Sections -->
+        <div class="product-grid mb-8" id="products-grid">
+            <!-- Products will be generated by JS -->
+        </div>
+
+        <!-- Deals Section -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Today's Deals</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="deal-card relative border border-gray-300 p-4 rounded cursor-pointer">
+                    <img src="https://placehold.co/200x200" alt="Discounted Bluetooth speaker in sleek black design with portable size and built-in battery indicator on clean white background studio shot" class="w-full product-img rounded">
+                    <div class="deal-overlay">Deal of the Day!</div>
+                    <p class="text-sm mt-2 text-gray-600">Bluetooth Speaker</p>
+                    <p class="font-bold">$29.99 <span class="line-through text-gray-500">$39.99</span></p>
+                    <button class="add-to-cart amazon-orange text-black px-4 py-1 rounded mt-2 w-full">Add to Cart</button>
+                </div>
+                <div class="deal-card relative border border-gray-300 p-4 rounded cursor-pointer">
+                    <img src="https://placehold.co/200x200" alt="Wireless charging pad with fast charge technology and multiple device compatibility shown with smartphone and smartwatch resting on it illuminated by soft blue glow" class="w-full product-img rounded">
+                    <div class="deal-overlay">Deal of the Day!</div>
+                    <p class="text-sm mt-2 text-gray-600">Wireless Charger</p>
+                    <p class="font-bold">$19.99 <span class="line-through text-gray-500">$29.99</span></p>
+                    <button class="add-to-cart amazon-orange text-black px-4 py-1 rounded mt-2 w-full">Add to Cart</button>
+                </div>
+                <div class="deal-card relative border border-gray-300 p-4 rounded cursor-pointer">
+                    <img src="https://placehold.co/200x200" alt="Ergonomic wrist rest mouse pad with gel cushioning and extended length for comfortable computer use on desk with keyboard and monitors in background" class="w-full product-img rounded">
+                    <div class="deal-overlay">Deal of the Day!</div>
+                    <p class="text-sm mt-2 text-gray-600">Mouse Pad</p>
+                    <p class="font-bold">$9.99 <span class="line-through text-gray-500">$14.99</span></p>
+                    <button class="add-to-cart amazon-orange text-black px-4 py-1 rounded mt-2 w-full">Add to Cart</button>
+                </div>
+                <div class="deal-card relative border border-gray-300 p-4 rounded cursor-pointer">
+                    <img src="https://placehold.co/200x200" alt="Plant care kit including ceramic pot, soil, seeds, and care instructions with vibrant succulent decorations on wooden countertop against natural light window view" class="w-full product-img rounded">
+                    <div class="deal-overlay">Deal of the Day!</div>
+                    <p class="text-sm mt-2 text-gray-600">Plant Kit</p>
+                    <p class="font-bold">$14.99 <span class="line-through text-gray-500">$24.99</span></p>
+                    <button class="add-to-cart amazon-orange text-black px-4 py-1 rounded mt-2 w-full">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold mb-2">Get to Know Us</h4>
+                    <ul>
+                        <li><a href="#" class="text-sm hover:underline">Careers</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Blog</a></li>
+                        <li><a href="#" class="text-sm hover:underline">About Amazon</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">Make Money with Us</h4>
+                    <ul>
+                        <li><a href="#" class="text-sm hover:underline">Sell products on Amazon</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Sell on Amazon Business</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Become an Affiliate</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">Amazon Payment Products</h4>
+                    <ul>
+                        <li><a href="#" class="text-sm hover:underline">Amazon Business Card</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Shop with Points</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Reload Your Balance</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">Let Us Help You</h4>
+                    <ul>
+                        <li><a href="#" class="text-sm hover:underline">Amazon and COVID-19</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Your Account</a></li>
+                        <li><a href="#" class="text-sm hover:underline">Help</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8">
+                <i class="fas fa-shopping-cart text-2xl mr-2"></i>
+                <span class="text-sm">© Amazon.com, Inc. or its affiliates</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JS Variables
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const cartCount = document.getElementById('cart-count');
+        const productsGrid = document.getElementById('products-grid');
+        const slide1 = document.getElementById('slide1');
+        const slide2 = document.getElementById('slide2');
+        const slide3 = document.getElementById('slide3');
+        const prevSlide = document.getElementById('prev-slide');
+        const nextSlide = document.getElementById('next-slide');
+
+        // Dummy products data
+        const products = [
+            {
+                title: 'Echo Dot (4th Gen)',
+                price: 39.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Amazon Echo Dot smart speaker in spherical white plastic casing with blue LED ring indicator and USB charging cable coiled beside it on minimalist shelf setup'
+            },
+            {
+                title: 'Kindle Paperwhite',
+                price: 129.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'E-reader device with waterproof design, adjustable light, and thin black frame holding an open book display on wooden desk with tea cup nearby'
+            },
+            {
+                title: 'Fire TV Stick',
+                price: 39.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Streaming device resembling USB flash drive with HDMI connector and remote control resting on entertainment system with wall-mounted TV in living room background'
+            },
+            {
+                title: 'Anker Power Bank',
+                price: 24.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Portable charger in compact rectangular shape with multiple USB ports and LED battery indicator, displayed on table with smartphone and laptop connections'
+            },
+            {
+                title: 'Instant Pot Duo',
+                price: 79.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Multi-cooker pressure cooker with stainless steel interior, digital control panel, and steam release valve on kitchen countertop with fresh ingredients surrounding'
+            },
+            {
+                title: 'Yoga Block Set',
+                price: 14.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Foam yoga blocks in various colors stacked together on hardwood floor with rolled yoga mat and water bottle beside them in home gym environment'
+            },
+            {
+                title: 'LED Strip Lights',
+                price: 19.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Color-changing LED light strips mounted along wall baseboard with remote control and phone app interface shown, casting warm illumination in bedroom'
+            },
+            {
+                title: 'Reusable Water Bottle',
+                price: 12.99,
+                image: 'https://placehold.co/200x200',
+                alt: 'Stainless steel insulated bottle with screw-top lid and straw in brushed metal finish standing upright with condensation drops on outdoor picnic table'
+            }
+        ];
+
+        // Generate Products Grid
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'border border-gray-300 p-4 rounded cursor-pointer hover:shadow-lg';
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.alt}" class="w-full product-img rounded mb-2">
+                <h3 class="font-bold text-sm mb-1">${product.title}</h3>
+                <div class="flex items-center mb-1">
+                    <span class="text-xs text-gray-600">${Array(5).fill('<i class="fas fa-star"></i>').join('')}</span>
+                    <span class="text-xs text-gray-600 ml-1">(1,234)</span>
+                </div>
+                <p class="text-lg font-bold mb-2">$${product.price.toFixed(2)}</p>
+                <button class="add-to-cart amazon-orange text-black px-2 py-1 rounded text-sm">Add to Cart</button>
+            `;
+            productsGrid.appendChild(card);
+        });
+
+        // Cart Functionality
+        let cart = [];
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                cart.push({ title: 'Product', price: 9.99 }); // Dummy data
+                updateCartCount();
+            });
+        });
+
+        function updateCartCount() {
+            cartCount.textContent = cart.length;
+        }
+
+        // Carousel Functionality
+        let currentSlide = 0;
+        const slides = [slide1, slide2, slide3];
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active', 'fade-in');
+                    slide.classList.remove('inactive', 'fade-out');
+                } else {
+                    slide.classList.add('inactive', 'fade-out');
+                    slide.classList.remove('active', 'fade-in');
+                }
+            });
+        }
+
+        nextSlide.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides();
+        });
+
+        prevSlide.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlides();
+        });
+
+        // Auto-slide carousel every 5 seconds
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides();
+        }, 5000);
+
+        // Search Functionality
+        function performSearch(query) {
+            // Simple search - hides non-matching products
+            const productCards = document.querySelectorAll('#products-grid > div');
+            productCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(query.toLowerCase())) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchBtn.addEventListener('click', () => {
+            performSearch(searchInput.value);
+        });
+
+        mobileSearchBtn.addEventListener('click', () => {
+            performSearch(mobileSearchInput.value);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch(searchInput.value);
+            }
+        });
+
+        mobileSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch(mobileSearchInput.value);
+            }
+        });
+
+        // Initial load
+        updateSlides();
+    </script>
+</body>
+</html>
