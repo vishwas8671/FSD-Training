@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Rahul",
+    "email": "ptomer40@yahoo.com",
+    "password": "12345"
+  },
+  {
+    "name": "Amit",
+    "email": "ptomer41@yahoo.com",
+    "password": "123"
+  },
+  {
+    "name": "Amit Kumar",
+    "email": "ptomer40@outlook.com",
+    "password": "35454"
+  },
+  {
+    "name": "Vishwas",
+    "email": "vishwas7906@gmail.com",
+    "password": "@Vishu956836"
+  },
+  {
+    "name": "Raghav",
+    "email": "raghav7906@gmail.com",
+    "password": "@Vishu956836"
+  },
+  {
+    "name": "Yuvraj",
+    "email": "raghayuvv7906@gmail.com",
+    "password": "@Vishu956836"
+  }
+]

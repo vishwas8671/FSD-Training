@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    background: linear-gradient( to right, rgb(178, 209, 165) , rgb(87, 87, 123));
+}
+
+.heading{
+    text-align: center;
+    padding: 10px;
+    text-decoration-line: underline;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+.main{
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    height: 200px;
+}
+
+p{
+    margin: 10px;
+}
+
+.para3{
+    margin: 10px;
+}
+
+div p:nth-of-type(1){
+    background-color: black;
+}
+
+/* p:nth-child(1){
+    background-color: black;
+} */
